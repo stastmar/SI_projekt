@@ -1,0 +1,151 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="uc-portal" name="UC – Webový portál">
+    <mxGraphModel dx="1683" dy="920" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="sys" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;verticalAlign=top;align=center;fontStyle=1;fontSize=14;strokeWidth=2;" value="Webový portál – telemedicínský systém (hypertenze)" vertex="1">
+          <mxGeometry height="940" width="760" x="210" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="pac" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontStyle=1;" value="Pacient" vertex="1">
+          <mxGeometry height="80" width="40" x="60" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="lek" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontStyle=1;" value="Lékař" vertex="1">
+          <mxGeometry height="80" width="40" x="1030" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="adm" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontStyle=1;" value="Administrátor" vertex="1">
+          <mxGeometry height="80" width="40" x="60" y="800" as="geometry" />
+        </mxCell>
+        <mxCell id="login" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="Přihlásit se" vertex="1">
+          <mxGeometry height="64" width="210" x="440" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="mfa" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="Ověřit identitu (dvoufaktorově)" vertex="1">
+          <mxGeometry height="64" width="210" x="730" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="p1" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="Zobrazit měření tlaku a pulsu" vertex="1">
+          <mxGeometry height="64" width="210" x="240" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="p2" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="Zobrazit týdenní souhrn (tlak, kroky, sůl, energetické nápoje)" vertex="1">
+          <mxGeometry height="64" width="210" x="240" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="p3" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="Číst doporučení lékaře" vertex="1">
+          <mxGeometry height="64" width="210" x="220" y="448" as="geometry" />
+        </mxCell>
+        <mxCell id="graf" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="Zobrazit graf tlaku, aktivity a životosprávy" vertex="1">
+          <mxGeometry height="64" width="210" x="480" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="exp" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="Exportovat data (PDF/CSV)" vertex="1">
+          <mxGeometry height="64" width="210" x="400" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="d1" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="Zobrazit seznam pacientů podle rizika" vertex="1">
+          <mxGeometry height="64" width="210" x="750" y="166" as="geometry" />
+        </mxCell>
+        <mxCell id="d2" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="Zobrazit detail pacienta" vertex="1">
+          <mxGeometry height="64" width="210" x="710" y="288" as="geometry" />
+        </mxCell>
+        <mxCell id="d3" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="Nastavit cílový tlak a limity alertů" vertex="1">
+          <mxGeometry height="64" width="210" x="730" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="d4" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="Vyřešit alert" vertex="1">
+          <mxGeometry height="64" width="210" x="730" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="d5" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="Opravit záznam měření" vertex="1">
+          <mxGeometry height="64" width="210" x="730" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="d6" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="Zapsat doporučení" vertex="1">
+          <mxGeometry height="64" width="210" x="730" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="lim" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="Nastavit doporučený limit energetických nápojů" vertex="1">
+          <mxGeometry height="64" width="210" x="470" y="395" as="geometry" />
+        </mxCell>
+        <mxCell id="hist" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="Uložit změnu do historie záznamu" vertex="1">
+          <mxGeometry height="64" width="210" x="470" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="a1" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="Spravovat uživatelské účty" vertex="1">
+          <mxGeometry height="64" width="210" x="240" y="740" as="geometry" />
+        </mxCell>
+        <mxCell id="a2" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="Spravovat role a oprávnění" vertex="1">
+          <mxGeometry height="64" width="210" x="250" y="860" as="geometry" />
+        </mxCell>
+        <mxCell id="a3" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="Přiřadit pacienta lékaři" vertex="1">
+          <mxGeometry height="64" width="210" x="470" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="a4" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="Zobrazit auditní log přístupů" vertex="1">
+          <mxGeometry height="64" width="210" x="470" y="860" as="geometry" />
+        </mxCell>
+        <mxCell id="as1" edge="1" parent="1" source="pac" style="endArrow=none;html=1;" target="login">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="as2" edge="1" parent="1" source="pac" style="endArrow=none;html=1;" target="p1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="as3" edge="1" parent="1" source="pac" style="endArrow=none;html=1;" target="p2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="as4" edge="1" parent="1" source="pac" style="endArrow=none;html=1;" target="p3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="as5" edge="1" parent="1" source="pac" style="endArrow=none;html=1;" target="graf">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="as6" edge="1" parent="1" source="pac" style="endArrow=none;html=1;" target="exp">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="as7" edge="1" parent="1" source="lek" style="endArrow=none;html=1;" target="login">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="as8" edge="1" parent="1" source="lek" style="endArrow=none;html=1;" target="d1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="as9" edge="1" parent="1" source="lek" style="endArrow=none;html=1;" target="d2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="as10" edge="1" parent="1" source="lek" style="endArrow=none;html=1;" target="d3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="as11" edge="1" parent="1" source="lek" style="endArrow=none;html=1;" target="d4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="as12" edge="1" parent="1" source="lek" style="endArrow=none;html=1;" target="d5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="as13" edge="1" parent="1" source="lek" style="endArrow=none;html=1;" target="d6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="as14" edge="1" parent="1" source="lek" style="endArrow=none;html=1;" target="exp">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="as15" edge="1" parent="1" source="adm" style="endArrow=none;html=1;" target="login">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="as16" edge="1" parent="1" source="adm" style="endArrow=none;html=1;" target="a1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="as17" edge="1" parent="1" source="adm" style="endArrow=none;html=1;" target="a2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="as18" edge="1" parent="1" source="adm" style="endArrow=none;html=1;" target="a3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="as19" edge="1" parent="1" source="adm" style="endArrow=none;html=1;" target="a4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="in20" edge="1" parent="1" source="login" style="endArrow=open;dashed=1;html=1;endSize=10;fontSize=11;" target="mfa" value="«include»">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="in21" edge="1" parent="1" source="d2" style="endArrow=open;dashed=1;html=1;endSize=10;fontSize=11;" target="graf" value="«include»">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="in22" edge="1" parent="1" source="d5" style="endArrow=open;dashed=1;html=1;endSize=10;fontSize=11;" target="hist" value="«include»">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ex23" edge="1" parent="1" source="lim" style="endArrow=open;dashed=1;html=1;endSize=10;fontSize=11;" target="d3" value="«extend»">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ex24" edge="1" parent="1" source="d6" style="endArrow=open;dashed=1;html=1;endSize=10;fontSize=11;" target="d4" value="«extend»">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
