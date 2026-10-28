@@ -1,0 +1,13 @@
+stateDiagram-v2
+  [*] --> Nepripojeno
+  Nepripojeno --> Vyhledavani: Pacient zahájí hledání
+  Vyhledavani --> Nalezeno: Zařízení nalezeno
+  Vyhledavani --> Chyba: Timeout / oprávnění
+  Nalezeno --> Parovani: Potvrzení pacienta
+  Parovani --> Pripojeno: Párování úspěšné
+  Parovani --> Chyba: Párování selhalo
+  Pripojeno --> PrijemDat: Přichází měření
+  PrijemDat --> Pripojeno: Hodnota převzata
+  Pripojeno --> Nepripojeno: Odpojení
+  Chyba --> Vyhledavani: Zkusit znovu
+  Chyba --> Nepripojeno: Zrušit

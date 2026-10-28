@@ -1,0 +1,13 @@
+stateDiagram-v2
+  [*] --> Rozpracovano
+  Rozpracovano --> Validace: Uložit
+  Validace --> Rozpracovano: Neplatné hodnoty
+  Validace --> CekaOffline: Lokálně uloženo
+  CekaOffline --> Odesilani: Síť dostupná a přihlášení platné
+  Odesilani --> Synchronizovano: Server potvrdil uložení
+  Odesilani --> CekaOffline: Timeout / 5xx / offline
+  Odesilani --> ChybaValidace: 400 / 422 / konflikt
+  Odesilani --> VyžadujePrihlaseni: 401
+  VyžadujePrihlaseni --> CekaOffline: Přihlášení obnoveno
+  ChybaValidace --> Rozpracovano: Pacient opraví záznam
+  Synchronizovano --> [*]

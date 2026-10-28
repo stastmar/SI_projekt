@@ -1,0 +1,22 @@
+flowchart LR
+  P["Pacient"]:::actor
+  S["BLE tlakoměr (externí)"]:::actor
+  A["WEB API"]:::actor
+  subgraph MOB["Pacientská mobilní aplikace"]
+    U1([Přihlásit se])
+    U2([Zadat měření ručně])
+    U3([Zapsat sůl / nápoj])
+    U4([Zobrazit historii])
+    U5([Zaznamenat aktivitu])
+    U6([Spárovat senzor])
+    U7([Navázat spojení])
+    U8([Převzít měření])
+    U9([Zobrazit stav senzoru])
+    U10([Synchronizovat záznamy])
+  end
+  P --- U1 & U2 & U3 & U4 & U5 & U6
+  S --- U6 & U7 & U8 & U9
+  A --- U1 & U4 & U10 & U3
+  U2 --> U10
+  U8 --> U10
+  classDef actor fill:#eef4ff,stroke:#4f78ae,color:#18263c

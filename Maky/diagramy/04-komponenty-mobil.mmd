@@ -1,0 +1,22 @@
+flowchart TB
+  subgraph Phone["Telefon pacienta"]
+    UI["Obrazovky a navigace"]
+    Forms["Formuláře / validace"]
+    History["Historie / graf"]
+    Store[("Lokální úložiště + fronta")]
+    Sync["Synchronizační služba"]
+    BLE["Adaptér senzoru / mock BLE"]
+    Auth["Přihlášení + bezpečné tokeny"]
+    UI --> Forms & History & Auth
+    Forms --> Store
+    BLE --> Forms
+    History --> Store
+    Store <--> Sync
+    Auth --> Sync
+  end
+  Sensor["Tlakoměr BLE"] -. "BLE (pozdější fáze)" .-> BLE
+  Sync <-- "HTTPS / JSON" --> API["WEB API – role 3"]
+  API --> DB[("Databáze – role 3")]
+  API --> Portal["Webový portál – role 2"]
+  DB --> Integrator["Integrátor NIS – role 4"]
+  Integrator --> NIS["NIS / HL7 FHIR"]
