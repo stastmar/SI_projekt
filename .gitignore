@@ -101,3 +101,10 @@ venv/
 *.synctex.gz
 *.fdb_latexmk
 *.fls
+# ---------- Visual Studio / .NET MAUI ----------
+.vs/
+**/.vs/
+**/bin/
+**/obj/
+*.user
+*.suo
