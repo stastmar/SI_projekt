@@ -10,5 +10,3 @@ Diagramy jsou ve třech podobách: **`.drawio`** (editovatelné objekty a šipky
 | Komponenty – propojení systému | ![Komponenty – propojení systému](04-komponenty-mobil.png) | [04-komponenty-mobil.drawio](04-komponenty-mobil.drawio) |
 
 Otevření: [app.diagrams.net](https://app.diagrams.net) → File → Open From → Device → soubor `.drawio`.
-
-**Poznámka:** jde o návrh mobilní části. Konkrétní API endpointy a BLE protokol je nutné odsouhlasit s týmem.
