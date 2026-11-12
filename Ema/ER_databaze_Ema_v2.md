@@ -14,7 +14,7 @@ Pracovní návrh role 3 (Ema), verze 2. Navazuje na návrh Sabi a JSON Maky.
 `id PK`, `uzivatel_id FK`, `jmeno`, `prijmeni`, `datum_narozeni`, `nis_identifikator`.
 
 ### Lekar
-`id PK`, `uzivatel_id FK`, `jmeno`, `prijmeni`, `specializace`, `icp`, `zastupce_lekar_id FK NULL → Lekar.id`.
+`id PK`, `uzivatel_id FK`, `jmeno`, `prijmeni`, `specializace`, `icp`, `zastupce_lekar_id FK NULL → Lekar.id`, `ordinacni_doba`.
 
 ### PacientLekar
 `id PK`, `pacient_id FK`, `lekar_id FK`, `platne_od`, `platne_do`, `aktivni`.
@@ -29,7 +29,7 @@ Pracovní návrh role 3 (Ema), verze 2. Navazuje na návrh Sabi a JSON Maky.
 `id PK`, `pacient_id FK`, `datum`, `kroky`, `aktivni_minuty`, `zdroj`, `klientske_uuid UUID UNIQUE`.
 
 ### ZaznamZivotospravy
-`id PK`, `pacient_id FK`, `typ`, `mnozstvi`, `jednotka`, `cas_zaznamu`, `poznamka`, `klientske_uuid UUID UNIQUE`.
+`id PK`, `pacient_id FK`, `typ` (energetický nápoj / káva / slané jídlo), `mnozstvi` (počet kusů; u soli 1–3 = málo / středně / hodně), `jednotka`, `cas_zaznamu`, `poznamka`, `klientske_uuid UUID UNIQUE`.
 
 ### LimitAlertu
 `id PK`, `pacient_id FK`, `cil_sys`, `cil_dia`, `horni_sys`, `horni_dia`, `dolni_sys`, `dolni_dia`, `max_energeticke_napoje_tyden`, `platne_od`, `nastavil_lekar_id FK`, `urgentni_sys`, `urgentni_dia`, `dny_bez_mereni`.
@@ -62,16 +62,23 @@ Pracovní návrh role 3 (Ema), verze 2. Navazuje na návrh Sabi a JSON Maky.
 - Nové i lékařem opravené měření vytvoří či aktualizuje synchronizační úlohu se stavem `čeká` ve stejné databázové transakci.
 - `Pacient.nis_identifikator` je navržen jako identifikátor pro `FHIR Patient.identifier`.
 - Integrátor používá samostatný DB účet: SELECT na `Pacient`, `Zarizeni`, `MereniTlaku` (případně `Aktivita` po schválení) a SELECT/UPDATE na `NisSynchronizace`; nepovoluje se plošný zápis do zdravotních dat.
-- Urgentní alert se v ordinační době eskaluje po 2 hodinách bez převzetí, mimo ordinační dobu ihned. Čas nastavuje administrátor; přesná definice ordinační doby a převzetí je k odsouhlasení.
+- Urgentní alert se v ordinační době eskaluje po 2 hodinách bez převzetí, mimo ordinační dobu ihned. Čas nastavuje administrátor; ordinační dobu má každý lékař v `Lekar.ordinacni_doba`, převzetí = lékař klikne „Převzít“ (stav Řeší se).
 - `NisSynchronizace` je pracovní návrh pro synchronizaci jednotlivých měření; integrátor má přímý, omezený přístup do databáze.
 - `AuditLog` obsahuje přístupy k citlivým údajům a změny, s omezeným přístupem a retenční politikou.
 
-## Otevřené otázky pro tým
+## Rozhodnutí týmu (12. 11. 2026)
 
-1. Sabi: potvrdit pravidla alertů, mazání/oprav a rozsah auditu.
-2. Maky: potvrdit strukturu aktivity a záznamů životosprávy a způsob identifikace zařízení.
-3. Integrátor: potvrdit FHIR mapování, rozsah synchronizovaných záznamů a strategii opakovaných pokusů.
-4. Společně: odsouhlasit konečnou sadu tabulek a endpointů.
+Odsouhlaseno všemi členkami týmu:
+
+1. **Alerty:** typy *nad horním limitem*, *urgentní* (jedno měření ≥ urgentní limit, výchozí 180/110), *pod dolním limitem* a *3 dny bez měření*. Převzetí = lékař klikne „Převzít“ → stav *Řeší se*. Ordinační dobu má každý lékař vlastní (`Lekar.ordinacni_doba`).
+2. **Mazání a opravy:** zdravotní záznamy se nemažou; opravit je smí jen lékař s povinným důvodem a zápisem do `HistorieZmen`. Pacient smí smazat jen dosud neodeslaný záznam v aplikaci.
+3. **Audit:** zapisuje se přihlášení, každé čtení zdravotních dat (detail, graf, export – otevření grafu = 1 záznam), každá změna a každý odmítnutý přístup (403).
+4. **Doporučení:** aplikace je stahuje přes `GET /pacienti/{id}/doporuceni`, uchovává pro offline zobrazení a při prvním zobrazení pacientem nastaví `precteno_at` (`PATCH /doporuceni/{id}`).
+5. **Aktivita:** denní souhrn kroků a aktivních minut ze senzorů telefonu (`zdroj = telefon`). **Životospráva:** `typ` (energetický nápoj / káva / slané jídlo), `mnozstvi` (počet kusů; u soli málo / středně / hodně).
+6. **Tlakoměr:** identifikátor z párování se uloží do `Zarizeni.identifikator`; aplikace ho posílá jako `deviceId`, API podle něj dohledá `zarizeni_id`.
+7. **Integrátor:** mapování dle Role4-S/25_Integrator_FHIR.docx (Patient, Observation, LOINC); do NIS se posílá jen měření tlaku a pulsu; 5 pokusů (1, 5, 15 min), při výpadku > 1 h e-mail administrátorovi. Životospráva do NIS (FP-I09) – ověřit na konzultaci.
+8. **Tabulky a endpointy:** odsouhlaseno 16 tabulek ER v2 a endpointy API v2. Vazba pacient–lékař se nemaže, ale ukončí (`platne_do`).
+9. **Doba uchování dat (NFP-16):** zatím otevřené – zeptat se na konzultaci 12. 11.; data v NIS se řídí pravidly nemocnice.
 ## Změny v2 a co ještě odsouhlasit
 
-Doplněno podle vzkazů Sabi z 29.–30. 10.: zástupce lékaře, systémová nastavení, urgentní limity, stavový cyklus alertů, informace o vyřešení, UUID offline záznamů a stav synchronizace. Jde o **návrh**; odsouhlasit zejména přístup pacienta k alertům, rozsah FHIR přenosu (FP-I09), konkrétní datové typy/omezení a retenci dat (NFP-16). Původní soubor v1 zůstává zachován.
+Doplněno podle vzkazů Sabi z 29.–30. 10.: zástupce lékaře, systémová nastavení, urgentní limity, stavový cyklus alertů, informace o vyřešení, UUID offline záznamů a stav synchronizace. Otevřené body týmu jsou rozhodnuté (viz Rozhodnutí týmu). ER diagram v2 s datovými typy (PostgreSQL, všechna id UUID, časy TIMESTAMPTZ) je v ER_databaze_Ema_v2.drawio. Zbývá: rozsah FHIR přenosu (FP-I09) a retence dat (NFP-16) – ověřit na konzultaci. Původní soubor v1 zůstává zachován.

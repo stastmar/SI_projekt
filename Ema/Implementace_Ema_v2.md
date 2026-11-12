@@ -12,7 +12,7 @@
 | Dokumentace API | OpenAPI (Swagger) | Jednotný kontrakt pro mobilní aplikaci, webový portál a backend. |
 | Autentizace | OAuth 2.0 / OpenID Connect prostřednictvím identity provideru; MFA (TOTP) | Centralizovaná správa identit, tokenů a druhého faktoru; přesné řešení nutno schválit. |
 | Webový portál | React + TypeScript (SPA; návrh Sabi) | Portál volá zabezpečené REST API, nepřistupuje přímo do DB. |
-| Mobilní aplikace | React Native + Expo + TypeScript (návrh Maky) | Sdílený návrh pro mobilní platformy, lokální fronta při offline režimu. |
+| Mobilní aplikace | .NET MAUI (C#) – návrh Maky | Jedna aplikace pro Android i iOS, stejný jazyk a ekosystém (.NET) jako backend v ASP.NET Core, lokální fronta pro offline režim. |
 | Integrátor NIS | Samostatná serverová služba, HL7 FHIR přes HTTPS | Čte potřebná data přímo z DB s omezeným účtem a předává je NIS; konkrétní FHIR zdroje odsouhlasit s rolí 4. |
 | Provoz | Linux, kontejnery Docker | Opakovatelné nasazení a oddělení služeb. |
 
@@ -52,9 +52,9 @@ Doporučený postup: (1) sjednotit požadavky a aktéry, (2) schválit API kontr
 
 ## 6. Verzovací systém a build server
 
-**Verzovací systém:** Git, sdílený repozitář GitHub. Každá změna vzniká na samostatné větvi (např. `feature/api-navrh`), popisuje se v commitu a do hlavní větve se slučuje po kontrole ostatním členem týmu. Do repozitáře patří diagramy `.drawio`, dokumentace `.md`, případně zdrojový kód; nepatří do něj hesla, tokeny, reálné údaje pacientů ani lokální konfigurační tajemství.
+**Verzovací systém:** Pro vývoj systému navrhujeme Git se sdíleným repozitářem na GitHubu. Každá změna vzniká na samostatné větvi (např. `feature/api-navrh`), popisuje se v commitu a do hlavní větve se slučuje po kontrole ostatním členem týmu. Do repozitáře patří diagramy `.drawio`, dokumentace `.md`, případně zdrojový kód; nepatří do něj hesla, tokeny, reálné údaje pacientů ani lokální konfigurační tajemství.
 
-**Build server / CI:** GitHub Actions. Při každém pull requestu by automaticky spouštěl sestavení backendu, statickou kontrolu, jednotkové testy a integrační testy proti izolované testovací databázi. Pro mobilní aplikaci lze samostatně spouštět TypeScript kontrolu a testy. Nasazení do testovacího prostředí by proběhlo až po úspěšných kontrolách; produkční nasazení by vyžadovalo schválení a bezpečné předání tajných údajů.
+**Build server / CI:** GitHub Actions. Při každém pull requestu by automaticky spouštěl sestavení backendu, statickou kontrolu, jednotkové testy a integrační testy proti izolované testovací databázi. Pro mobilní aplikaci se samostatně spouští sestavení a testy aplikace v .NET MAUI. Nasazení do testovacího prostředí by proběhlo až po úspěšných kontrolách; produkční nasazení by vyžadovalo schválení a bezpečné předání tajných údajů.
 
 Ukázková posloupnost CI: `checkout → restore dependencies → build → test → report výsledků`. Konkrétní workflow bude možné vytvořit teprve po založení zdrojového kódu.
 
@@ -67,16 +67,3 @@ Pro WEB API se plánují jednotkové testy validace a autorizace, integrační t
 Portál bude navržen jako **React + TypeScript SPA**. Interní alerty budou podle návrhu Sabi dostupné pouze oprávněnému lékaři, zatímco pacient uvidí výzvu ke kontaktu s lékařem. API a databáze budou podporovat eskalaci urgentního alertu na zástupce lékaře po nastaveném intervalu (výchozí návrh 120 minut v ordinační době, mimo ordinační dobu ihned). Každá oprava měření se audituje a zařadí k nové synchronizaci s NIS.
 
 Přímý přístup integrátoru k databázi bude omezen na nutné tabulky a synchronizační frontu; integrátor bude předávat měření prostřednictvím HL7 FHIR přes HTTPS. Jde o návrhovou dokumentaci, nikoliv existující nasazený systém.
-
-**Soulad s reálnou prací týmu:** popis větví a pull requestů v kapitole 6 je cílový doporučený postup; pokud tým ve skutečnosti nahrává soubory přímo do `main`, je nutné tuto pasáž před odevzdáním přepsat podle skutečnosti.
-
-## 9. Otevřené body k odsouhlasení
-
-1. Potvrdit se Sabi, Maky a rolí 4 technologický stack, zejména backend a identity provider.
-2. Schválit pravidla alertů, individuálních limitů a oprávnění administrátora.
-3. Doplnit do ER návrhu v2 identifikátory pro offline synchronizaci aktivity/životosprávy a chybějící atributy alertů.
-4. S rolí 4 dohodnout mapování na FHIR, způsob sledování synchronizace a předávání oprav.
-5. Rozhodnout, zda se skutečně bude vytvářet prototyp, nebo pouze návrhová dokumentace dle zadání.
-
----
-*Text je určen jako pracovní kapitola pro společnou dokumentaci. Nenahrazuje týmové schválení architektury.*

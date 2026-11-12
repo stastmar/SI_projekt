@@ -31,7 +31,8 @@
 | PATCH `/doporuceni/{id}` | Označení jako přečtené | Pacient / přiřazený lékař dle pravidel |
 | GET, POST, PATCH `/uzivatele` | Správa uživatelů | Administrátor; PATCH `/uzivatele/{id}` |
 | PUT `/uzivatele/{id}/role` | Změna role | Administrátor |
-| POST, DELETE `/pacienti/{id}/lekari` | Přiřazení lékaře | Administrátor; DELETE upřesnit identifikátor vazby |
+| POST `/pacienti/{id}/lekari` | Přiřazení lékaře | Administrátor |
+| PATCH `/pacienti/{id}/lekari/{vazbaId}` | Ukončení vazby pacient–lékař (vyplní `platne_do`, vazba se nemaže) | Administrátor |
 | GET `/audit?uzivatel=&pacient=&od=&do=` | Auditní log | Administrátor s omezeným přístupem |
 
 ## Příklad příjmu měření
@@ -62,13 +63,13 @@
 
 ## Urgentní alerty a eskalace (doplnění v2)
 
-Interní stavy alertu: `Vytvořen`, `Odeslán lékaři`, `Zobrazen`, `Řeší se`, `Vyřešen`, `Eskalován`, `Zrušen`. Při urgentním alertu, který lékař nepřevezme, systém v ordinační době po 2 hodinách předá alert jeho zástupci (`Lekar.zastupce_lekar_id`); mimo ordinační dobu ihned. Interval se spravuje v `NastaveniSystemu` administrátorem. API musí evidovat čas vyřešení, poznámku a audit změny stavu. Přesná pravidla přechodů a definici převzetí musí tým odsouhlasit.
+Interní stavy alertu: `Vytvořen`, `Odeslán lékaři`, `Zobrazen`, `Řeší se`, `Vyřešen`, `Eskalován`, `Zrušen`. Při urgentním alertu, který lékař nepřevezme, systém v ordinační době po 2 hodinách předá alert jeho zástupci (`Lekar.zastupce_lekar_id`); mimo ordinační dobu ihned. Interval se spravuje v `NastaveniSystemu` administrátorem. API musí evidovat čas vyřešení, poznámku a audit změny stavu. Převzetí = lékař klikne „Převzít“ (stav `Řeší se`); ordinační dobu má každý lékař v `Lekar.ordinacni_doba` (odsouhlaseno 12. 11.).
 
-Pacientovi se podle návrhu Sabi **nezobrazují interní alerty**, pouze výzva ke kontaktu s lékařem. Toto rozhodnutí musí být sladěno s portálem, aplikací a společnou maticí oprávnění.
+Pacientovi se podle návrhu Sabi **nezobrazují interní alerty**, pouze výzva ke kontaktu s lékařem. Odsouhlaseno týmem 12. 11. – sedí s portálem, aplikací i maticí oprávnění.
 
 ## Integrátor NIS (doplnění v2)
 
-Při vytvoření **i opravě** měření API transakčně založí nebo aktualizuje `NisSynchronizace` se stavem `čeká`. Integrátor samostatně odesílá FHIR zprávy a stav mění na `odesláno` nebo `chyba`. `Pacient.nis_identifikator` slouží jako navržený identifikátor pro FHIR `Patient.identifier`. Integrátor má oddělený DB účet s minimálními právy; rozsah přenosu aktivit a životosprávy zůstává otevřený.
+Při vytvoření **i opravě** měření API transakčně založí nebo aktualizuje `NisSynchronizace` se stavem `čeká`. Integrátor samostatně odesílá FHIR zprávy a stav mění na `odesláno` nebo `chyba`. `Pacient.nis_identifikator` slouží jako navržený identifikátor pro FHIR `Patient.identifier`. Integrátor má oddělený DB účet s minimálními právy; do NIS se posílá jen měření tlaku a pulsu; přenos životosprávy (FP-I09) se ověří na konzultaci.
 
 ## Bezpečnost
 HTTPS/TLS, krátce platné přístupové tokeny, bezpečně uložené obnovovací tokeny, MFA (např. TOTP), bezpečné hashování hesel (Argon2id), autorizace u každého požadavku, audit přístupu k citlivým datům a exportů. Logy nesmí obsahovat hesla, MFA tajemství ani celé zdravotní záznamy. Retence, přístupová práva a šifrování záloh se upřesní v týmové bezpečnostní politice.
@@ -76,6 +77,6 @@ HTTPS/TLS, krátce platné přístupové tokeny, bezpečně uložené obnovovac�
 ## Návaznost na ER v2 a otevřené otázky
 - `MereniTlaku.id` odpovídá `measurementId` z JSON Maky. Pro aktivitu a životosprávu **doporučujeme přidat klientské UUID**, aby i jejich offline opakované odeslání bylo idempotentní; ER v2 tato pole obsahuje.
 - Sabi v Excelu navrhuje navíc `urgentni_sys`, `urgentni_dia`, `dny_bez_mereni` v `LimitAlertu` a `vyreseno`, `poznamka` v `Alert`; **ER v2 je doplňuje jako návrh k odsouhlasení**.
-- Rozhodnout s rolí 4 mapování FHIR, rozsah přenosu, chování při opravě a opakování synchronizace.
-- Rozhodnout se Sabi pravidla alertů, audit grafů, mazání záznamů a čtení doporučení; s Maky příjem doporučení v aplikaci.
+- **Rozhodnuto týmem 12. 11.** (podrobně v ER_databaze_Ema_v2.md, Rozhodnutí týmu): pravidla alertů a převzetí, mazání a opravy, rozsah auditu (vč. grafů), doporučení v aplikaci (offline + `precteno_at`), identifikace tlakoměru přes `deviceId`, FHIR mapování a opakování synchronizace dle role 4, ukončení vazby pacient–lékař místo mazání.
+- Otevřené: přenos životosprávy do NIS (FP-I09) a doba uchování dat (NFP-16) – ověřit na konzultaci.
 - Endpointy jsou návrh kontraktu, nikoliv implementované funkční služby.
