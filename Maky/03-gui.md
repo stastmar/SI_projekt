@@ -19,3 +19,6 @@ Barvy hodnot vycházejí z individuálních limitů, nikoli pevných hranic; sta
 
 ## GUI-31 – Pohybová aktivita
 [Návrh obrazovky a alternativních stavů](GUI-31-aktivita.md). Číselné hodnoty jsou ilustrační.
+
+## Doplnění podle společných požadavků
+GUI-10 musí fungovat offline podle FP-A14/BP-13, s pokyny lékaře a informací o kontaktování zdravotnické pomoci. GUI-06: z karty Životospráva klepnout na energetický nápoj, vybrat množství, uložit (A-03); GUI-16 doplnit kávu. GUI-07: upozornění na nové doporučení bez zdravotních údajů. GUI-08: klid, manžeta, dvě měření. GUI-09: ráno a večer. GUI-12/21: zámek po 5 minutách. GUI-29 zůstává podmíněné backendem. GUI-31 je nový návrh k odsouhlasení, nikoli již schválená obrazovka.

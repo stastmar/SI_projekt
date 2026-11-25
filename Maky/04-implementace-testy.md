@@ -23,3 +23,15 @@ Níže jsou doplňkové scénáře role 1, nikoli nový závazný katalog. Vazbu
 | Přístupnost | Textový indikátor stavu, čitelnost a ovládání |
 
 Nyní lze kontrolovat konzistenci dokumentace, kontraktů, scénářů a GUI. Funkční, integrační, bezpečnostní a zařízeníové testy jsou plánované, nikoli provedené.
+
+## Vazba na testy Sabi – ověřeno v 17_Testovani.docx
+| ID | Kritérium návrhu |
+|---|---|
+| A-01 | 135/85, puls 72, uložit a zobrazit v historii |
+| A-02 | Offline fronta, po připojení odeslat a označit synchronizováno |
+| A-03 | Energetický nápoj do 3 klepnutí a zobrazení v historii |
+| S-01/S-02 | Stejné UUID a obsah: 200 bez duplicity; jiný obsah: 409 |
+| BT-01 | Cizí pacient: 403 bez dat, audit na serveru |
+| BT-03 | 150 požadavků/min, od 101. 429; offline 185/115, výzva do 2 s, po připojení alert v portálu. Testovací limit musí být nastaven lékařem tak, aby hodnota byla kritická; nejde o univerzální klinickou hranici. |
+| BT-05 | API validace dle BP-06, TLS 1.0 odmítnuto |
+Pouze syntetická data (NFP-14). Jde o kontrolu návrhu, nikoli provedené funkční testy. Test BT-03 je třeba sladit se změnovým zněním BP-13 společně se Sabi.
