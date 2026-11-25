@@ -1,40 +1,17 @@
-# Funkční a nefunkční požadavky
+# Požadavky a případy užití – role 1
 
-## Aktéři
-- **Pacient**: používá aplikaci, zadává údaje a kontroluje synchronizaci.
-- **Tlakoměr BLE (externí zařízení)**: poskytuje identifikaci, spojení a hodnoty měření; pro MVP simulovaný.
-- **WEB API (externí systém)**: autentizuje, přijímá data a potvrzuje uložení.
+Jde o návrh pacientské mobilní aplikace, nikoli o dodávku funkčního softwaru. Jediným závazným katalogem je [společná tabulka požadavků](../spolecny/Pozadavky_spolecne.xlsx); zde jsou popsány scénáře mobilní části, nikoli další sada požadavků.
 
-> Zadání požaduje nejméně dva aktéry a čtyři use casy pro každého aktéra v samostatném diagramu. Zde je pacient a externí tlakoměr; WEB API je třetí aktér. U senzoru jsou modelovány interakce s aplikací, nikoli lidské úkony.
+## Aktéři a scénáře
+Pacient se přihlašuje s MFA, pořizuje měření, prohlíží historii, eviduje životosprávu, sleduje aktivitu, čte doporučení a nastavuje připomínky. BLE tlakoměr se účastní párování, spojení, přenosu měření a zjištění stavu. WEB API zajišťuje autentizaci, synchronizaci, historii, limity a doporučení. Telefonní senzory jsou součástí zařízení pacienta.
 
-## Funkční požadavky
-| ID | Požadavek | Priorita | MVP |
-|---|---|---|---|
-| M-F01 | Pacient se přihlásí | vysoká | demo přihlášení |
-| M-F02 | Pacient uloží krevní tlak, puls a čas | vysoká | ano |
-| M-F03 | Pacient vidí historii a graf | vysoká | ano |
-| M-F04 | Pacient zaznamená sůl a energetické nápoje | vysoká | ano |
-| M-F05 | Pacient eviduje fyzickou aktivitu | střední | ručně |
-| M-F06 | Záznamy fungují offline a později se synchronizují | vysoká | ano |
-| M-F07 | Aplikace zobrazuje stav odeslání/chyby | vysoká | ano |
-| M-F08 | Aplikace vyhledá a spáruje BLE tlakoměr | střední | simulace |
-| M-F09 | Aplikace načte hodnoty ze spárovaného tlakoměru | střední | simulace |
-| M-F10 | Pacient může zobrazit detaily záznamu | střední | ano |
+- Ruční měření: pacient zadá tlak, puls a čas; aplikace validuje a uloží záznam do lokální fronty. Po dostupnosti sítě jej odešle. Při výpadku zůstane čekající.
+- BLE: pacient vybere kompatibilní tlakoměr, potvrdí párování, aplikace přijme měření a identifikátor zařízení; při chybě nabídne opakování nebo ruční vstup.
+- Životospráva: pacient zadá kávu, energetický nápoj (počet kusů) nebo slané jídlo (málo/středně/hodně), čas a případnou poznámku.
+- Aktivita: aplikace po udělení oprávnění načte denní kroky a aktivní minuty z telefonu; nedostupnost dat nezamění za nulu.
+- Historie: pacient vybere období a detail či graf; vidí stav synchronizace a individuální limity. Smazat může pouze neodeslaný lokální záznam; serverové opravy provádí lékař s historií změn.
+- Doporučení: pacient čte text lékaře i offline; první zobrazení se potvrdí API po dostupnosti sítě.
 
-## Nefunkční požadavky
-- HTTPS/TLS; žádná přímá komunikace mobilní aplikace s DB.
-- Autentizační tokeny ukládat do zabezpečeného úložiště zařízení, nikoli do prostého AsyncStorage.
-- Lokální data o zdraví ukládat bezpečně; pro prototyp používat pouze syntetická data.
-- Každé měření má jednoznačné ID a čas s časovým pásmem; opakovaný upload nesmí vytvářet duplicity.
-- Srozumitelný stav `čeká / odesílá se / synchronizováno / chyba`.
-- Aplikace nesmí sama diagnostikovat hypertenzi ani vydávat léčebná doporučení.
-- Zpracování osobních údajů a retenční doby musí tým odsouhlasit s ohledem na GDPR.
+Aplikace sama nediagnostikuje ani nevytváří léčebná doporučení. Interní alerty patří lékaři; pacient vidí obecnou výzvu ke kontaktu. Klinická pravidla čekající na konzultaci nejsou uzavřena.
 
-## Use case scénáře
-**UC-M01 Zaznamenat tlak:** pacient otevře formulář → vyplní systolický, diastolický tlak a puls → aplikace ověří formát a základní konzistenci → uloží lokálně → odešle při dostupné síti → zobrazí stav. Při chybě síťového spojení data zůstávají ve frontě.
-
-**UC-M02 Zapsat životosprávu:** pacient vybere sůl / energetický nápoj → zadá množství či počet podle schválených jednotek → uloží → synchronizuje.
-
-**UC-M03 Připojit tlakoměr:** pacient zahájí hledání → zařízení je nalezeno → pacient potvrdí párování → aplikace naváže spojení; při chybě nabídne opakování. V MVP jde o simulaci.
-
-**UC-M04 Zobrazit historii:** pacient otevře historii → vidí uložená lokální měření a jejich synchronizační stav → vybere detail nebo graf.
+Viz [diagramy](diagramy/README.md), [architektura](02-architektura.md) a [společná bezpečnostní kapitola](../spolecny/06_Bezpecnost_GDPR.docx).

@@ -1,20 +1,23 @@
 # Údržba a distribuce aktualizací – role 1
 
-## Mobilní aplikace
-- Změny spravovat v Gitu, verzovat aplikaci a evidovat změny v changelogu.
-- Testovat na podporovaných verzích Android/iOS před vydáním.
-- Distribuce: testovací build pro spolužáky; případná produkční distribuce přes oficiální obchody.
-- Aktualizace JS/UI lze při vhodné konfiguraci distribuovat OTA (např. Expo Updates); změny nativních modulů, oprávnění či BLE knihoven vyžadují nový binární build.
-- U změn API udržovat kompatibilitu klienta a serveru, případně verzovat endpointy.
-- Zálohování a retenční pravidla serveru zajišťuje role 3; aplikace má bezpečně zpracovat neodeslaná data.
+Kapitola popisuje budoucí provoz pacientské aplikace. Cílem údržby je zachovat dostupnost, bezpečnost, kompatibilitu a správnost přenosu zdravotních dat bez ztráty čekajících záznamů.
+
+## Druhy údržby
+**Korektivní:** opravy chyb formulářů, pádů, BLE spojení, synchronizace a nesprávného zobrazení. Hlášení obsahuje verzi aplikace, OS, typ zařízení a reprodukční postup bez zdravotních údajů. Oprava projde revizí a regresními testy.
+**Adaptivní:** reakce na nové verze Android/iOS, změny oprávnění, BLE protokolů, pravidel obchodů a API. Před vydáním se ověří kompatibilita podporovaných zařízení a starších klientů.
+**Preventivní:** pravidelná kontrola závislostí, bezpečnostních aktualizací, expirace certifikátů, kapacity lokální fronty a obnovy relace. Sleduje se funkčnost synchronizace a migrací úložiště.
+**Perfektivní:** zlepšování čitelnosti, přístupnosti, rychlosti, spotřeby baterie a použitelnosti podle zpětné vazby pacientů a lékařů. Změny klinických pravidel vyžadují týmové schválení.
+
+## Monitoring a odpovědnosti
+Mobilní část sleduje pády, četnost chyb spojení, stáří čekajících záznamů a úspěšnost synchronizace. Provozní metriky nesmí obsahovat zdravotní hodnoty, tokeny ani identifikátory pacientů bez schváleného právního a bezpečnostního rámce. Pacient vidí stav a poslední úspěšnou synchronizaci. Role 3 zajišťuje monitoring API/DB, zálohy a obnovu serveru; role 4 integrátor a NIS. Incident se předává odpovědné roli, zaznamená se příčina, náprava a ověření.
+
+## Vydávání aktualizací
+Zdrojové změny se verzují v Gitu, kontrolují pull requestem a evidují v changelogu. Budoucí CI sestaví a otestuje aplikaci; před distribucí se ověří přihlášení, BLE, offline fronta, migrace lokálního úložiště a kompatibilita API. Produkční distribuce se plánuje přes Google Play a App Store. Nativní změny vyžadují nové podepsané vydání. Postupné nasazení umožní sledovat chyby a zastavit další distribuci.
+
+## Servisní okna a návrat verze
+Serverové zásahy se koordinují s rolemi 3 a 4, plánují mimo vytížené období a oznamují uživatelům. Při nedostupnosti API aplikace zachová lokální frontu a zobrazí stav. Před migrací serveru se ověří záloha a plán obnovy; změny API musí být zpětně kompatibilní nebo verzované. Po zásahu se ověří autentizace, přenos a absence duplicit. Při závažné chybě se zastaví rollout, obnoví kompatibilní serverová verze a vydá opravená mobilní verze; návrat nesmí poškodit lokální data. Obchody nemusí umožnit okamžitý downgrade, proto je důležitá kompatibilita a oprava směrem vpřed.
 
 ## Firmware tlakoměru
-- Prototyp nepředpokládá vlastní aktualizaci firmwaru zdravotnického zařízení.
-- Pokud výrobce poskytne oficiální postup a podporu OTA, aktualizaci navrhnout až pro konkrétní model a dokumentovat riziko přerušení spojení.
-- Bez dokumentovaného protokolu zařízení firmware neaktualizovat.
+Aktualizace pouze oficiálním postupem výrobce pro konkrétní podporovaný model. Před zahájením ověřit napájení, spojení a podmínky výrobce; při chybě postupovat podle jeho návodu. Vlastní firmware ani neověřený OTA mechanismus se nenavrhuje. Po aktualizaci ověřit párování a přenos měření.
 
-## Provozní postup
-1. Nahlášení chyby a reprodukční kroky bez osobních zdravotních údajů.
-2. Oprava ve větvi, code review, testy.
-3. Vydání testovací verze, ověření synchronizace a kompatibility API.
-4. Vydání nové verze a sledování anonymizovaných provozních chyb se souhlasem a v souladu s GDPR.
+Bezpečnost a retence se řídí společnou politikou; konkrétní retenční doba NFP-16 zůstává otevřená. V této fázi jde o plán údržby, nikoli doklad skutečného provozu.
