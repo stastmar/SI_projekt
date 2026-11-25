@@ -15,3 +15,6 @@ Pacient se přihlašuje s MFA, pořizuje měření, prohlíží historii, eviduj
 Aplikace sama nediagnostikuje ani nevytváří léčebná doporučení. Interní alerty patří lékaři; pacient vidí obecnou výzvu ke kontaktu. Klinická pravidla čekající na konzultaci nejsou uzavřena.
 
 Viz [diagramy](diagramy/README.md), [architektura](02-architektura.md) a [společná bezpečnostní kapitola](../spolecny/06_Bezpecnost_GDPR.docx).
+
+## Trasování společných požadavků
+FP-A01 přihlášení; A02 ruční měření; A03–A04 párování a přenos; A05–A06 offline a stav; A07 rychlý záznam; A08–A09 historie, graf a detail; A10 kroky a aktivní minuty; A11 doporučení a upozornění na nové doporučení; A12 průvodce (klid, manžeta, dvě měření); A13 připomínky ráno a večer; A14 kritické upozornění podle změnového znění; A15 příznak rytmu; A16 volitelné motivační prvky (série dnů bez energetického nápoje, týdenní souhrn). NFP-10: sůl a energetický nápoj nejvýše tři klepnutí. Káva je doplnění podle ER v2, nikoli změna společného katalogu.

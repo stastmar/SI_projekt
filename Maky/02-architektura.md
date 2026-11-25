@@ -24,3 +24,6 @@ Aktivita a životospráva se odesílají na /pacienti/{id}/aktivity a /zivotospr
 ## DFD a bezpečnost
 F1: tlak, puls, identifikátor a dostupný příznak rytmu z BLE; ruční vstup životosprávy od pacienta. F2: měření, aktivita, životospráva a potvrzení přečtení přes HTTPS s tokenem. F3: potvrzení uložení, historie, limity a doporučení. Upřesnění společného DFD předat týmu.
 Bezpečnost, GDPR a audit se řídí [společnou kapitolou](../spolecny/06_Bezpecnost_GDPR.docx); tokeny a zdravotní cache musí být chráněné, logy bez citlivých údajů. Retence NFP-16 zůstává otevřená.
+
+## Upřesnění podle společné tabulky
+BP-01: access token nejvýše 15 minut, refresh token Keychain/Keystore. BP-02: zámek po 5 minutách, PIN/biometrie, vzdálené zneplatnění tokenů. BP-04: pouze potvrzený spárovaný tlakoměr. BP-15: neodeslaná měření uchovat nejméně 30 dní. BP-13 a FP-A14 (změnové znění): lokálně vyhodnotit kritickou hranici lékaře a zobrazit jeho schválené pokyny i offline; cache musí obsahovat verzi a stáří limitů a pokynů. Postup při nedostupné cache a klinická pravidla potvrdit s týmem. HTTP 429 respektuje Retry-After, pokud je dostupný, a zachová frontu. TLS nejméně 1.2 (BP-06).
