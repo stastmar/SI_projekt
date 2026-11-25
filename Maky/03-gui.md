@@ -1,49 +1,21 @@
-# Návrh GUI – obrazovky a navigace
+# Návrh GUI – role 1
 
-## Spodní navigace
-`Domů | Měření | Životospráva | Historie` a ikona `Nastavení`.
+Základní vizuální podklad: [30 návrhů obrazovek](HypertenzeApp_GUI_30_nahledu_tym.docx). Následující specifikace je aktualizace návrhu, nikoli tvrzení o implementaci.
 
-### 1. Domů
-- Karta „Poslední měření“: tlak (mmHg), puls (tep/min), čas.
-- Dlaždice „Zadat tlak“, „Zapsat nápoj“, „Zapsat sůl“.
-- Stav synchronizace a poslední úspěšné odeslání.
+## Navigace
+Přehled | Historie | Životospráva | Od lékaře. Nastavení je dostupné z přehledu.
 
-### 2. Měření
-- Formulář: systolický (mmHg), diastolický (mmHg), puls (tep/min), datum/čas.
-- Přepínač `Ručně / Ze senzoru (simulace)`.
-- Tlačítko „Uložit měření“, zpětná vazba po uložení.
+| Obrazovka | Obsah |
+|---|---|
+| Přihlášení | Účet, heslo, MFA; bez hostovského režimu |
+| Přehled | Poslední tlak/puls/čas, stav synchronizace, nové měření, průvodce a připomínky |
+| Měření | Ruční vstup nebo BLE, validace, potvrzení lokálního uložení, dostupný příznak rytmu |
+| Historie | Filtr období, graf, detail, stav synchronizace; pouze neodeslaný záznam lze smazat |
+| Životospráva | Káva, energetické nápoje, slané jídlo, pohybová aktivita |
+| Od lékaře | Individuální limity, doporučení, čas a stav přečtení; offline cache |
+| Nastavení | Párování tlakoměru, oprávnění senzorů, připomínky, odhlášení |
 
-### 3. Životospráva a aktivita
-- Typ: `Sůl`, `Energetický nápoj`, `Aktivita`.
-- Příslušné pole pro množství/počet nebo kroky/minuty.
-- Datum a čas, potvrzení uložení.
+Barvy hodnot vycházejí z individuálních limitů, nikoli pevných hranic; stav je vyjádřen také textem. Aplikace nevytváří diagnózy ani vlastní doporučení. Interní alerty se nezobrazují. Klinický postup při urgentní hodnotě a podrobnosti průvodce budou doplněny po konzultaci.
 
-### 4. Historie
-- Seznam položek se stavem synchronizace, filtr podle typu a období.
-- Graf tlaku (systolický/diastolický) podle času; bez diagnostických závěrů.
-- Detail záznamu.
-
-### 5. Nastavení / zařízení
-- Testovací účet, URL testovacího serveru jen ve vývojové konfiguraci, odhlášení.
-- Připojení tlakoměru (v MVP výslovně „Simulace BLE“).
-
-## Textový wireframe
-```text
-┌──────────────────────────────┐
-│ Můj tlak         ⚙ Nastavení │
-│                              │
-│ Poslední měření              │
-│ 135 / 85 mmHg   Puls: 72     │
-│ Dnes 09:30                   │
-│                              │
-│ [ + Zadat nové měření ]      │
-│ [ + Zapsat nápoj ]           │
-│ [ + Zapsat sůl ]             │
-│                              │
-│ Synchronizace: ✓ dokončeno   │
-│                              │
-│ Domů  Měření  Záznamy  Graf  │
-└──────────────────────────────┘
-```
-
-Barvy: světlé pozadí, tmavý kontrastní text, modré akcenty; barva sama nesmí být jediným indikátorem chyby/stavu.
+## GUI-31 – Pohybová aktivita
+[Návrh obrazovky a alternativních stavů](GUI-31-aktivita.md). Číselné hodnoty jsou ilustrační.

@@ -1,33 +1,26 @@
-# Architektura a datové toky
+# Architektura a datové toky – role 1
 
-## Hranice odpovědností
-**Mobilní aplikace:** obrazovky, lokální validace vstupu, lokální fronta, historie, komunikace BLE, HTTPS klient. **WEB API:** autentizace, autorizační pravidla, serverová validace, ukládání do DB, generování alertů. **Portál:** zobrazení záznamů pacientovi/lékaři podle rolí. **Integrátor:** přímé čtení DB a synchronizace s NIS/FHIR (podle zadání).
+Mobilní klient bude obsahovat GUI, validaci, adaptér BLE, adaptér pohybových senzorů, zabezpečené lokální úložiště, autentizaci a synchronizační službu. Komunikuje pouze s WEB API přes HTTPS/JSON; nikdy přímo s DB ani NIS. Integrátor čte DB a předává do NIS tlak a puls. Viz [API v2](../Ema/WEB_API_Ema_v2.md), [ER v2](../Ema/ER_databaze_Ema_v2.md) a [společný DFD](../spolecny/DFD_tok_dat.drawio).
 
-## Tok měření
-1. Pacient zadá měření nebo ho převezme ze senzoru.
-2. Aplikace vytvoří `measurementId` (UUID), čas `measuredAt`, hodnoty a `source`.
-3. Data se uloží do lokální fronty se stavem `pending`.
-4. Při připojení aplikace odešle požadavek s přístupovým tokenem přes HTTPS.
-5. API ověří uživatele, validuje záznam, idempotentně jej uloží a vrátí potvrzení.
-6. Aplikace označí záznam jako `synced`; při chybě ho ponechá ve frontě.
-7. Portál čte záznam přes API; integrátor načítá schválené záznamy z DB pro NIS.
+## Zařízení
+Aktuálně podporovaný Android/iOS, BLE pro kompatibilní tlakoměr, zabezpečené úložiště a internet pro synchronizaci. Pohybová aktivita využije dostupné systémové rozhraní kroků a aktivních minut; konkrétní platformní API a model tlakoměru se ověří před implementací. Při chybě BLE je možný ruční vstup. Chybějící oprávnění či senzor neznamenají nulovou aktivitu.
 
-## Lokální datové entity (návrh, ne serverové tabulky)
-| Entita | Minimální pole |
+## Data
+| Lokální entita | Obsah |
 |---|---|
-| Measurement | measurementId, measuredAt, systolic, diastolic, pulse, source, syncStatus |
-| LifestyleEntry | entryId, recordedAt, kind, amount, unit, syncStatus |
-| ActivityEntry | activityId, recordedAt, activityType, durationMinutes, steps, syncStatus |
-| PairedDevice | localDeviceId, displayName, connectionStatus, lastSeenAt |
+| Měření | measurementId (UUID), measuredAt (čas s pásmem), systolic, diastolic, pulse, source, deviceId, irregularRhythm, lokální syncStatus |
+| Aktivita | klientské UUID, datum, kroky, aktivní minuty, zdroj telefon, syncStatus |
+| Životospráva | klientské UUID, typ (káva / energetický nápoj / slané jídlo), množství, jednotka, čas, poznámka, syncStatus |
+| Zařízení | identifikátor z párování, název, stav spojení |
+| Doporučení | ID, text lékaře, čas vytvoření, stav přečtení a čekající potvrzení |
 
-`LifestyleEntry.kind`: `salt` nebo `energy_drink`. Přesné jednotky příjmu soli a energetických nápojů musí tým schválit (např. gramy odhadované soli vs. počet nápojů). Nepředstírat přesné nutriční hodnoty bez dat.
+Názvy JSON polí aktivity a životosprávy a pravidla aktualizace denního souhrnu musí potvrdit role 3; ER v2 obsahuje klientská UUID. U ručního měření bez zařízení je FK v ER nullable; přesnou reprezentaci deviceId a neznámého příznaku rytmu v API je nutné potvrdit.
 
-## Offline a řešení chyb
-- Lokální zápis je první krok; bez internetu se záznam neztratí.
-- Po obnovení spojení synchronizovat položky `pending`/`failed` s exponenciálním odstupem opakování.
-- Stejné ID při opakovaném požadavku; API musí podporovat idempotenci.
-- Chyba 401 → obnovit relaci nebo vyžádat přihlášení; 400/422 → ukázat chybu a neopakovat automaticky; 5xx/timeout → opakovat později.
-- Mazání či úpravy již synchronizovaných záznamů vyžadují zvláštní pravidla (otevřený bod).
+## Synchronizace
+Po validaci se záznam trvale uloží lokálně. POST /api/v1/pacienti/{id}/mereni s tokenem použije stejné UUID a obsah při opakování. 201 nebo 200 potvrzuje uložení; timeout/5xx znamená opakování s odstupem; 401 obnovu relace, 403 zastavení a kontrolu oprávnění, 422 opravu vstupu, 409 konflikt k vyřešení bez automatického přepsání. Při nejistém doručení nelze záznam považovat za bezpečně neodeslaný. Pacient nesmí měnit potvrzené záznamy.
 
-## Bezpečnost
-HTTPS, autorizace na serveru, minimální lokální uchování, ochrana tokenů, oddělení demo/produkčního prostředí, žádná reálná pacientská data v repozitáři. Konkrétní šifrování lokální DB a retenční pravidla je nutné navrhnout před produkčním použitím.
+Aktivita a životospráva se odesílají na /pacienti/{id}/aktivity a /zivotosprava. Historie, graf, souhrn, limity a doporučení se načítají přes API v2. Doporučení se uchovají offline; při prvním zobrazení se odešle PATCH /doporuceni/{id}, případně z fronty. Lokální cache se oddělí podle účtu.
+
+## DFD a bezpečnost
+F1: tlak, puls, identifikátor a dostupný příznak rytmu z BLE; ruční vstup životosprávy od pacienta. F2: měření, aktivita, životospráva a potvrzení přečtení přes HTTPS s tokenem. F3: potvrzení uložení, historie, limity a doporučení. Upřesnění společného DFD předat týmu.
+Bezpečnost, GDPR a audit se řídí [společnou kapitolou](../spolecny/06_Bezpecnost_GDPR.docx); tokeny a zdravotní cache musí být chráněné, logy bez citlivých údajů. Retence NFP-16 zůstává otevřená.

@@ -4,5 +4,7 @@
   "systolic": 135,
   "diastolic": 85,
   "pulse": 72,
-  "source": "manual"
+  "source": "manual",
+  "deviceId": "DEVICE-001",
+  "irregularRhythm": false
 }
