@@ -28,3 +28,5 @@ Přehled | Historie | Životospráva | Od lékaře
 - Offline: zobrazit poslední dostupné údaje a jejich stáří, čekající přenos po obnovení sítě.
 
 Denní souhrn obsahuje kroky a aktivní minuty; žádný automatický cíl, diagnóza ani doporučení. Přesné platformní rozhraní a pravidla aktualizace denního souhrnu se ověří při návrhu implementace.
+
+![Grafický návrh GUI-31](GUI-31-aktivita.svg)
